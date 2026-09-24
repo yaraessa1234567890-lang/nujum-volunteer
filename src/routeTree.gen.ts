@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AchievementsRouteImport } from './routes/achievements'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as FormsRouteImport } from './routes/forms'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -23,6 +25,16 @@ const IndexRoute = IndexRouteImport.update({
 const AchievementsRoute = AchievementsRouteImport.update({
   id: '/achievements',
   path: '/achievements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FormsRoute = FormsRouteImport.update({
+  id: '/forms',
+  path: '/forms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GalleryRoute = GalleryRouteImport.update({
@@ -44,6 +56,8 @@ const RegisterRoute = RegisterRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/admin': typeof AdminRoute
+  '/forms': typeof FormsRoute
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
@@ -51,6 +65,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/admin': typeof AdminRoute
+  '/forms': typeof FormsRoute
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
@@ -59,21 +75,47 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/achievements': typeof AchievementsRoute
+  '/admin': typeof AdminRoute
+  '/forms': typeof FormsRoute
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/achievements' | '/gallery' | '/impact' | '/register'
+  fullPaths:
+    | '/'
+    | '/achievements'
+    | '/admin'
+    | '/forms'
+    | '/gallery'
+    | '/impact'
+    | '/register'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/achievements' | '/gallery' | '/impact' | '/register'
-  id: '__root__' | '/' | '/achievements' | '/gallery' | '/impact' | '/register'
+  to:
+    | '/'
+    | '/achievements'
+    | '/admin'
+    | '/forms'
+    | '/gallery'
+    | '/impact'
+    | '/register'
+  id:
+    | '__root__'
+    | '/'
+    | '/achievements'
+    | '/admin'
+    | '/forms'
+    | '/gallery'
+    | '/impact'
+    | '/register'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AchievementsRoute: typeof AchievementsRoute
+  AdminRoute: typeof AdminRoute
+  FormsRoute: typeof FormsRoute
   GalleryRoute: typeof GalleryRoute
   ImpactRoute: typeof ImpactRoute
   RegisterRoute: typeof RegisterRoute
@@ -93,6 +135,20 @@ declare module '@tanstack/react-router' {
       path: '/achievements'
       fullPath: '/achievements'
       preLoaderRoute: typeof AchievementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forms': {
+      id: '/forms'
+      path: '/forms'
+      fullPath: '/forms'
+      preLoaderRoute: typeof FormsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -122,6 +178,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AchievementsRoute: AchievementsRoute,
+  AdminRoute: AdminRoute,
+  FormsRoute: FormsRoute,
   GalleryRoute: GalleryRoute,
   ImpactRoute: ImpactRoute,
   RegisterRoute: RegisterRoute,
