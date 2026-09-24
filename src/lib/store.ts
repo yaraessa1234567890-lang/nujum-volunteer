@@ -77,16 +77,18 @@ export const CATEGORIES = [
   "المبادرات الرقمية",
 ];
 
-export const ENTITY_PASSCODE = "1500";
+export const ENTITY_PASSCODE = "1900";
 export const IDEA_REFERENCE = "777777777777777777777";
 
 const STORAGE_KEY = "safia-volunteering-v1";
+
+const SEED_HOURS = [6, 5, 4, 5, 4, 6, 5, 4];
 
 const seededOpportunities: Opportunity[] = CATEGORIES.map((category, i) => ({
   id: `seed-${i + 1}`,
   title: category,
   category,
-  hours: [6, 5, 4, 5, 4, 6, 5, 4][i],
+  hours: SEED_HOURS[i] ?? 4,
   seats: 20,
   date: "طوال العام الدراسي",
   description:

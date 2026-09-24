@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { actions, statusLabels, useAppState } from "@/lib/store";
 import { PageHeader, Panel } from "@/components/Section";
 
-type Search = { opp?: string };
+type Search = { opp: string };
 
 export const Route = createFileRoute("/register")({
   validateSearch: (search: Record<string, unknown>): Search => ({
-    opp: typeof search.opp === "string" ? search.opp : undefined,
+    opp: typeof search["opp"] === "string" ? (search["opp"] as string) : "",
   }),
   head: () => ({
     meta: [
