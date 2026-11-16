@@ -16,6 +16,7 @@ import { Route as FormsRouteImport } from './routes/forms'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as UnlockRouteImport } from './routes/unlock'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UnlockRoute = UnlockRouteImport.update({
+  id: '/unlock',
+  path: '/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
+  '/unlock': typeof UnlockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
+  '/unlock': typeof UnlockRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/impact': typeof ImpactRoute
   '/register': typeof RegisterRoute
+  '/unlock': typeof UnlockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/impact'
     | '/register'
+    | '/unlock'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/impact'
     | '/register'
+    | '/unlock'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/impact'
     | '/register'
+    | '/unlock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   ImpactRoute: typeof ImpactRoute
   RegisterRoute: typeof RegisterRoute
+  UnlockRoute: typeof UnlockRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/unlock': {
+      id: '/unlock'
+      path: '/unlock'
+      fullPath: '/unlock'
+      preLoaderRoute: typeof UnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   ImpactRoute: ImpactRoute,
   RegisterRoute: RegisterRoute,
+  UnlockRoute: UnlockRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

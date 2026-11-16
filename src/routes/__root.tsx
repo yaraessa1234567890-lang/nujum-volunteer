@@ -5,6 +5,8 @@ import {
   createRootRouteWithContext,
   useRouter,
   HeadContent,
+  redirect,
+  useRouterState,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
@@ -13,6 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/Navbar";
 import { RoleGate } from "@/components/RoleGate";
+import { isSiteUnlocked } from "@/lib/gate.functions";
 
 function NotFoundComponent() {
   return (
@@ -65,6 +68,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ location }) => {
+    if (location.pathname === "/unlock") return;
+    const { unlocked } = await isSiteUnlocked();
+    if (!unlocked) throw redirect({ to: "/unlock" });
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -111,6 +119,14 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (pathname === "/unlock") {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <Outlet />
+      </QueryClientProvider>
+    );
+  }
 
   return (
     <QueryClientProvider client={queryClient}>
