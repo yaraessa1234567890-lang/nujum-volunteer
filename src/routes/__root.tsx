@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   redirect,
+  type ErrorComponentProps,
   useRouterState,
   Scripts,
 } from "@tanstack/react-router";
@@ -36,7 +37,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -68,7 +69,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ location }) => {
+  beforeLoad: async ({ location }): Promise<void> => {
     if (location.pathname === "/unlock") return;
     const { unlocked } = await isSiteUnlocked();
     if (!unlocked) throw redirect({ to: "/unlock" });
