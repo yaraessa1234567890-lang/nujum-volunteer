@@ -5,18 +5,17 @@ import {
   createRootRouteWithContext,
   useRouter,
   HeadContent,
-  redirect,
   type ErrorComponentProps,
-  useRouterState,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "@/components/Navbar";
 import { RoleGate } from "@/components/RoleGate";
-import { isSiteUnlocked } from "@/lib/gate.functions";
+import { PasscodeScreen } from "@/components/PasscodeScreen";
+import { isUnlockedClient } from "@/lib/site-gate";
 
 function NotFoundComponent() {
   return (
@@ -69,11 +68,6 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ location }): Promise<void> => {
-    if (location.pathname === "/unlock") return;
-    const { unlocked } = await isSiteUnlocked();
-    if (!unlocked) throw redirect({ to: "/unlock" });
-  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -120,14 +114,13 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  if (pathname === "/unlock") {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <Outlet />
-      </QueryClientProvider>
-    );
-  }
+  const [gate, setGate] = useState<"checking" | "locked" | "open">("checking");
+  useEffect(() => {
+    setGate(isUnlockedClient() ? "open" : "locked");
+  }, []);
+
+  if (gate === "checking") return <div className="min-h-screen bg-background" />;
+  if (gate === "locked") return <PasscodeScreen onUnlock={() => setGate("open")} />;
 
   return (
     <QueryClientProvider client={queryClient}>
